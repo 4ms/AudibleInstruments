@@ -338,8 +338,8 @@ struct PlaitsWidget : ModuleWidget {
 		menu->addChild(createBoolPtrMenuItem("Low CPU (disable resampling)", "", &module->lowCpu));
 
 		menu->addChild(createBoolMenuItem("Edit LPG response/decay", "",
-			[=]() {return this->getLpgMode();},
-			[=](bool val) {this->setLpgMode(val);}
+			[this]() {return this->getLpgMode();},
+			[this](bool val) {this->setLpgMode(val);}
 		));
 
 		menu->addChild(new MenuSeparator);
