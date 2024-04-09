@@ -342,8 +342,8 @@ struct FramesWidget : ModuleWidget {
 		addChild(createLight<SmallLight<GreenLight>>(Vec(232, 101), module, Frames::GAIN1_LIGHT + 3));
 		addChild(createLight<MediumLight<GreenLight>>(Vec(61, 155), module, Frames::EDIT_LIGHT));
 
-		// addChild(createLightCentered<Rogan6PSLight<RedGreenBlueLight>>(Vec(133.556641, 159.560532), module, Frames::FRAME_LIGHT));
-		addChild(createLightCentered<Rogan6PSLight<RedGreenBlueLight>>(Vec(90, 220), module, Frames::FRAME_LIGHT));
+		addChild(createLightCentered<Rogan6PSLight<RedGreenBlueLight>>(Vec(133.556641, 159.560532), module, Frames::FRAME_LIGHT));
+		//addChild(createLightCentered<Rogan6PSLight<RedGreenBlueLight>>(Vec(90, 220), module, Frames::FRAME_LIGHT));
 	}
 
 	void appendContextMenu(Menu* menu) override {
