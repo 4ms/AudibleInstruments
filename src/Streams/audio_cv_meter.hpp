@@ -53,7 +53,7 @@ public:
     void Process(int32_t sample, uint32_t timestep_us)
     {
         if ((sample >> 1) * previous_sample_ < 0 ||
-            zero_crossing_interval_ >= (4096L * kHardwareTimestep_us) / timestep_us)
+            zero_crossing_interval_ >= (4096L * kHardwareTimestep_us) / (int32_t)timestep_us)
         {
             int32_t error = zero_crossing_interval_ - average_zero_crossing_interval_;
             average_zero_crossing_interval_ += error >> 3;
@@ -64,11 +64,11 @@ public:
             ++zero_crossing_interval_;
         }
 
-        if (cv_ && average_zero_crossing_interval_ < (200L * kHardwareTimestep_us) / timestep_us)
+        if (cv_ && average_zero_crossing_interval_ < (200L * kHardwareTimestep_us) / (int32_t)timestep_us)
         {
             cv_ = false;
         }
-        else if (!cv_ && average_zero_crossing_interval_ > (400L * kHardwareTimestep_us) / timestep_us)
+        else if (!cv_ && average_zero_crossing_interval_ > (400L * kHardwareTimestep_us) / (int32_t)timestep_us)
         {
             cv_ = true;
         }
@@ -106,7 +106,7 @@ private:
     // Hardware Streams updates its LEDs at 4kHz (250us period), but we may be
     // using a different rate here. We take this into account when filtering
     // or interval-counting so that the software LEDs feel the same.
-    static constexpr uint32_t kHardwareTimestep_us = 250;
+    static constexpr int32_t kHardwareTimestep_us = 250;
 
     bool cv_;
     int32_t peak_;

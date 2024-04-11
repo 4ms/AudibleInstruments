@@ -266,7 +266,7 @@ struct TidesWidget : ModuleWidget {
 	}
 
 	void step() override {
-		Tides* module = dynamic_cast<Tides*>(this->module);
+		// Tides* module = dynamic_cast<Tides*>(this->module);
 
 		// if (module) {
 			// tidesPanel->setVisible(!module->sheep);
@@ -277,7 +277,7 @@ struct TidesWidget : ModuleWidget {
 	}
 
 	void appendContextMenu(Menu* menu) override {
-		Tides* module = dynamic_cast<Tides*>(this->module);
+		// Tides* module = dynamic_cast<Tides*>(this->module);
 
 		menu->addChild(new MenuSeparator);
 
