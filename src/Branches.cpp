@@ -55,7 +55,7 @@ struct Branches : Module {
 			int channels = std::max(input->getChannels(), 1);
 
 			// mode button
-			if (modeTriggers[i].process(params[MODE1_PARAM + i].getValue() > 0.f))
+			if (modeTriggers[i].process(params[MODE1_PARAM + i].getValue() > 0.5f))
 				modes[i] ^= true;
 
 			bool lightA = false;

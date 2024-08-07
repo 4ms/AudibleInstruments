@@ -357,26 +357,33 @@ struct Marbles : Module {
 	}
 
 	void process(const ProcessArgs& args) override {
+#ifdef METAMODULE
+		constexpr float ButtonThreshold = 0.5f;
+#else
+		constexpr float ButtonThreshold = 0.f;
+#endif
 		// Buttons
-		if (tDejaVuTrigger.process(params[T_DEJA_VU_PARAM].getValue() <= 0.f)) {
+		if (tDejaVuTrigger.process(params[T_DEJA_VU_PARAM].getValue() <= ButtonThreshold)) {
 			t_deja_vu = !t_deja_vu;
 		}
-		if (xDejaVuTrigger.process(params[X_DEJA_VU_PARAM].getValue() <= 0.f)) {
+		if (xDejaVuTrigger.process(params[X_DEJA_VU_PARAM].getValue() <= ButtonThreshold)) {
 			x_deja_vu = !x_deja_vu;
 		}
 		if (tModeTrigger.process(params[T_MODE_PARAM].getValue() <= 0.f)) {
+		if (tModeTrigger.process(params[T_MODE_PARAM].getValue() <= ButtonThreshold)) {
 			t_mode = (t_mode + 1) % 3;
 		}
-		if (xModeTrigger.process(params[X_MODE_PARAM].getValue() <= 0.f)) {
+		if (xModeTrigger.process(params[X_MODE_PARAM].getValue() <= ButtonThreshold)) {
 			x_mode = (x_mode + 1) % 3;
 		}
-		if (tRangeTrigger.process(params[T_RANGE_PARAM].getValue() <= 0.f)) {
+		if (tRangeTrigger.process(params[T_RANGE_PARAM].getValue() <= ButtonThreshold)) {
 			t_range = (t_range + 1) % 3;
 		}
-		if (xRangeTrigger.process(params[X_RANGE_PARAM].getValue() <= 0.f)) {
+		if (xRangeTrigger.process(params[X_RANGE_PARAM].getValue() <= ButtonThreshold)) {
 			x_range = (x_range + 1) % 3;
 		}
 		if (externalTrigger.process(params[EXTERNAL_PARAM].getValue() <= 0.f)) {
+		if (externalTrigger.process(params[EXTERNAL_PARAM].getValue() <= ButtonThreshold)) {
 			external = !external;
 		}
 
