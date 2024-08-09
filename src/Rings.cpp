@@ -70,8 +70,13 @@ struct Rings : Module {
 
 	Rings() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+#ifdef METAMODULE
+		configSwitch(POLYPHONY_PARAM, 0, 2, 0, "Polyphony");
+		configSwitch(RESONATOR_PARAM, 0, 2, 0, "Resonator type");
+#else
 		configButton(POLYPHONY_PARAM, "Polyphony");
 		configButton(RESONATOR_PARAM, "Resonator type");
+#endif
 		configParam(FREQUENCY_PARAM, 0.0, 60.0, 30.0, "Frequency");
 		configParam(STRUCTURE_PARAM, 0.0, 1.0, 0.5, "Structure");
 		configParam(BRIGHTNESS_PARAM, 0.0, 1.0, 0.5, "Brightness");
@@ -119,7 +124,7 @@ struct Rings : Module {
 
 		// Polyphony / model
 #ifdef METAMODULE
-		polyphonyMode = std::clamp<int>(std::round(params[POLYPHONY_PARAM].getValue() * 3.f), 0, 2);
+		polyphonyMode = params[POLYPHONY_PARAM].getValue();
 #else
 		if (polyphonyTrigger.process(params[POLYPHONY_PARAM].getValue())) {
 			polyphonyMode = (polyphonyMode + 1) % 3;
@@ -129,7 +134,7 @@ struct Rings : Module {
 		lights[POLYPHONY_RED_LIGHT].value = (polyphonyMode == 1 || polyphonyMode == 2) ? 1.0 : 0.0;
 
 #ifdef METAMODULE
-		resonatorModel = (rings::ResonatorModel)std::clamp<int>(std::round(params[RESONATOR_PARAM].getValue() * 3.f), 0, 2);
+		resonatorModel = (rings::ResonatorModel)params[RESONATOR_PARAM].getValue();
 #else
 		if (modelTrigger.process(params[RESONATOR_PARAM].getValue())) {
 			resonatorModel = (rings::ResonatorModel)((resonatorModel + 1) % 3);
