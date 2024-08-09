@@ -232,25 +232,25 @@ struct Tides : Module {
 
 
 struct TidesWidget : ModuleWidget {
-	// SvgPanel* tidesPanel;
+	SvgPanel* tidesPanel;
 	SvgPanel* sheepPanel;
 
 	TidesWidget(Tides* module) {
 		setModule(module);
 		box.size = Vec(15 * 14, 380);
-		// {
-		// 	tidesPanel = new SvgPanel();
-		// 	tidesPanel->setBackground(Svg::load(asset::plugin(pluginInstance, "res/Tides.svg")));
-		// 	tidesPanel->box.size = box.size;
-		// 	addChild(tidesPanel);
-		// }
-		// {
+		{
+			tidesPanel = new SvgPanel();
+			tidesPanel->setBackground(Svg::load(asset::plugin(pluginInstance, "res/Tides.svg")));
+			tidesPanel->box.size = box.size;
+			addChild(tidesPanel);
+		}
+		{
 			sheepPanel = new SvgPanel();
 			sheepPanel->setBackground(Svg::load(asset::plugin(pluginInstance, "res/Sheep.svg")));
 			sheepPanel->box.size = box.size;
-			// sheepPanel->hide();
+			sheepPanel->hide();
 			addChild(sheepPanel);
-		// }
+		}
 
 		addChild(createWidget<ScrewSilver>(Vec(15, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(180, 0)));
@@ -291,10 +291,10 @@ struct TidesWidget : ModuleWidget {
 	void step() override {
 		// Tides* module = dynamic_cast<Tides*>(this->module);
 
-		// if (module) {
-			// tidesPanel->setVisible(!module->sheep);
-			// sheepPanel->setVisible(module->sheep);
-		// }
+		if (module) {
+			tidesPanel->setVisible(!module->sheep);
+			sheepPanel->setVisible(module->sheep);
+		}
 
 		ModuleWidget::step();
 	}
@@ -304,7 +304,7 @@ struct TidesWidget : ModuleWidget {
 
 		menu->addChild(new MenuSeparator);
 
-		// menu->addChild(createBoolPtrMenuItem("Wavetable firmware (Sheep)", "", &module->sheep));
+		menu->addChild(createBoolPtrMenuItem("Wavetable firmware (Sheep)", "", &module->sheep));
 	}
 };
 
