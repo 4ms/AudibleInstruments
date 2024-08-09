@@ -20,6 +20,11 @@ struct Rings : Module {
 		DAMPING_MOD_PARAM,
 		STRUCTURE_MOD_PARAM,
 		POSITION_MOD_PARAM,
+		// TODO:
+		// #ifdef METAMODULE
+		//EASTER_EGG_PARAM,
+		//EXTENDED_RES_MODE_PARAM,
+		// #endif
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -113,15 +118,23 @@ struct Rings : Module {
 		}
 
 		// Polyphony / model
+#ifdef METAMODULE
+		polyphonyMode = std::clamp(std::round(params[POLYPHONY_PARAM].getValue() * 3.f), 0, 2);
+#else
 		if (polyphonyTrigger.process(params[POLYPHONY_PARAM].getValue())) {
 			polyphonyMode = (polyphonyMode + 1) % 3;
 		}
+#endif
 		lights[POLYPHONY_GREEN_LIGHT].value = (polyphonyMode == 0 || polyphonyMode == 1) ? 1.0 : 0.0;
 		lights[POLYPHONY_RED_LIGHT].value = (polyphonyMode == 1 || polyphonyMode == 2) ? 1.0 : 0.0;
 
+#ifdef METAMODULE
+		resonatorModel = std::clamp(std::round(params[RESONATOR_PARAM].getValue() * 3.f), 0, 2);
+#else
 		if (modelTrigger.process(params[RESONATOR_PARAM].getValue())) {
 			resonatorModel = (rings::ResonatorModel)((resonatorModel + 1) % 3);
 		}
+#endif
 		int modelColor = resonatorModel % 3;
 		lights[RESONATOR_GREEN_LIGHT].value = (modelColor == 0 || modelColor == 1) ? 1.0 : 0.0;
 		lights[RESONATOR_RED_LIGHT].value = (modelColor == 1 || modelColor == 2) ? 1.0 : 0.0;

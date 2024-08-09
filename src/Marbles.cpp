@@ -369,7 +369,12 @@ struct Marbles : Module {
 		if (xDejaVuTrigger.process(params[X_DEJA_VU_PARAM].getValue() <= ButtonThreshold)) {
 			x_deja_vu = !x_deja_vu;
 		}
-		if (tModeTrigger.process(params[T_MODE_PARAM].getValue() <= 0.f)) {
+#ifdef METAMODULE
+		t_mode = std::clamp<int>(std::round(params[T_MODE_PARAM].getValue() * 3.f), 0, 2);
+		x_mode = std::clamp<int>(std::round(params[X_MODE_PARAM].getValue() * 3.f), 0, 2);
+		t_range = std::clamp<int>(std::round(params[T_RANGE_PARAM].getValue() * 3.f), 0, 2);
+		x_range = std::clamp<int>(std::round(params[X_RANGE_PARAM].getValue() * 3.f), 0, 2);
+#else
 		if (tModeTrigger.process(params[T_MODE_PARAM].getValue() <= ButtonThreshold)) {
 			t_mode = (t_mode + 1) % 3;
 		}
@@ -382,7 +387,7 @@ struct Marbles : Module {
 		if (xRangeTrigger.process(params[X_RANGE_PARAM].getValue() <= ButtonThreshold)) {
 			x_range = (x_range + 1) % 3;
 		}
-		if (externalTrigger.process(params[EXTERNAL_PARAM].getValue() <= 0.f)) {
+#endif
 		if (externalTrigger.process(params[EXTERNAL_PARAM].getValue() <= ButtonThreshold)) {
 			external = !external;
 		}
