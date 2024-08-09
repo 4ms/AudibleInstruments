@@ -119,7 +119,7 @@ struct Rings : Module {
 
 		// Polyphony / model
 #ifdef METAMODULE
-		polyphonyMode = std::clamp(std::round(params[POLYPHONY_PARAM].getValue() * 3.f), 0, 2);
+		polyphonyMode = std::clamp<int>(std::round(params[POLYPHONY_PARAM].getValue() * 3.f), 0, 2);
 #else
 		if (polyphonyTrigger.process(params[POLYPHONY_PARAM].getValue())) {
 			polyphonyMode = (polyphonyMode + 1) % 3;
@@ -129,7 +129,7 @@ struct Rings : Module {
 		lights[POLYPHONY_RED_LIGHT].value = (polyphonyMode == 1 || polyphonyMode == 2) ? 1.0 : 0.0;
 
 #ifdef METAMODULE
-		resonatorModel = std::clamp(std::round(params[RESONATOR_PARAM].getValue() * 3.f), 0, 2);
+		resonatorModel = (rings::ResonatorModel)std::clamp<int>(std::round(params[RESONATOR_PARAM].getValue() * 3.f), 0, 2);
 #else
 		if (modelTrigger.process(params[RESONATOR_PARAM].getValue())) {
 			resonatorModel = (rings::ResonatorModel)((resonatorModel + 1) % 3);

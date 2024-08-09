@@ -85,7 +85,7 @@ struct Tides : Module {
 		tides::GeneratorMode mode = generator.mode();
 
 #ifdef METAMODULE
-		if (auto new_mode = std::clamp(std::round(params[MODE_PARAM].getValue()), 0, 2); new_mode != mode) {
+		if (auto new_mode = std::clamp<int>(std::round(params[MODE_PARAM].getValue()), 0, 2); new_mode != mode) {
 			mode = (tides::GeneratorMode)new_mode;
 			generator.set_mode(mode);
 		}
@@ -101,7 +101,7 @@ struct Tides : Module {
 		tides::GeneratorRange range = generator.range();
 
 #ifdef METAMODULE
-		if (auto new_range = std::clamp(std::round(params[RANGE_PARAM].getValue()), 0, 2); new_range != range) {
+		if (auto new_range = std::clamp<int>(std::round(params[RANGE_PARAM].getValue()), 0, 2); new_range != range) {
 			range = (tides::GeneratorRange)new_range;
 			generator.set_range(range);
 		}
