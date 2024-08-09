@@ -223,7 +223,7 @@ struct Elements : Module {
 				elements::PerformanceState performance;
 				performance.note = 12.f * inputs[NOTE_INPUT].getVoltage(c) + std::round(params[COARSE_PARAM].getValue()) + params[FINE_PARAM].getValue() + 69.f;
 				performance.modulation = 3.3f * dsp::quarticBipolar(params[FM_PARAM].getValue()) * 49.5f * inputs[FM_INPUT].getPolyVoltage(c) / 5.f;
-				performance.gate = params[PLAY_PARAM].getValue() >= 1.f || inputs[GATE_INPUT].getPolyVoltage(c) >= 1.f;
+				performance.gate = params[PLAY_PARAM].getValue() >= 0.5f || inputs[GATE_INPUT].getPolyVoltage(c) >= 1.f;
 				performance.strength = clamp(1.f - inputs[STRENGTH_INPUT].getPolyVoltage(c) / 5.f, 0.f, 1.f);
 
 				// Generate audio
