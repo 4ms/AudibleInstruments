@@ -20,6 +20,11 @@ struct Rings : Module {
 		DAMPING_MOD_PARAM,
 		STRUCTURE_MOD_PARAM,
 		POSITION_MOD_PARAM,
+		// TODO:
+		// #ifdef METAMODULE
+		//EASTER_EGG_PARAM,
+		//EXTENDED_RES_MODE_PARAM,
+		// #endif
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -65,8 +70,13 @@ struct Rings : Module {
 
 	Rings() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+#ifdef METAMODULE
+		configSwitch(POLYPHONY_PARAM, 0, 2, 0, "Polyphony");
+		configSwitch(RESONATOR_PARAM, 0, 2, 0, "Resonator type");
+#else
 		configButton(POLYPHONY_PARAM, "Polyphony");
 		configButton(RESONATOR_PARAM, "Resonator type");
+#endif
 		configParam(FREQUENCY_PARAM, 0.0, 60.0, 30.0, "Frequency");
 		configParam(STRUCTURE_PARAM, 0.0, 1.0, 0.5, "Structure");
 		configParam(BRIGHTNESS_PARAM, 0.0, 1.0, 0.5, "Brightness");
@@ -113,15 +123,23 @@ struct Rings : Module {
 		}
 
 		// Polyphony / model
+#ifdef METAMODULE
+		polyphonyMode = params[POLYPHONY_PARAM].getValue();
+#else
 		if (polyphonyTrigger.process(params[POLYPHONY_PARAM].getValue())) {
 			polyphonyMode = (polyphonyMode + 1) % 3;
 		}
+#endif
 		lights[POLYPHONY_GREEN_LIGHT].value = (polyphonyMode == 0 || polyphonyMode == 1) ? 1.0 : 0.0;
 		lights[POLYPHONY_RED_LIGHT].value = (polyphonyMode == 1 || polyphonyMode == 2) ? 1.0 : 0.0;
 
+#ifdef METAMODULE
+		resonatorModel = (rings::ResonatorModel)params[RESONATOR_PARAM].getValue();
+#else
 		if (modelTrigger.process(params[RESONATOR_PARAM].getValue())) {
 			resonatorModel = (rings::ResonatorModel)((resonatorModel + 1) % 3);
 		}
+#endif
 		int modelColor = resonatorModel % 3;
 		lights[RESONATOR_GREEN_LIGHT].value = (modelColor == 0 || modelColor == 1) ? 1.0 : 0.0;
 		lights[RESONATOR_RED_LIGHT].value = (modelColor == 1 || modelColor == 2) ? 1.0 : 0.0;

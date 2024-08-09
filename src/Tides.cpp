@@ -52,8 +52,13 @@ struct Tides : Module {
 
 	Tides() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+#ifdef METAMODULE
+		configSwitch(MODE_PARAM, 0, 2, 0, "Output mode");
+		configSwitch(RANGE_PARAM, 2, 0, 0, "Frequency range");
+#else
 		configButton(MODE_PARAM, "Output mode");
 		configButton(RANGE_PARAM, "Frequency range");
+#endif
 		configParam(FREQUENCY_PARAM, -48.0, 48.0, 0.0, "Main frequency");
 		configParam(FM_PARAM, -12.0, 12.0, 0.0, "FM input attenuverter");
 		configParam(SHAPE_PARAM, -1.0, 1.0, 0.0, "Shape");
@@ -83,18 +88,34 @@ struct Tides : Module {
 
 	void process(const ProcessArgs& args) override {
 		tides::GeneratorMode mode = generator.mode();
+
+#ifdef METAMODULE
+		if (auto new_mode = params[MODE_PARAM].getValue(); new_mode != mode) {
+			mode = (tides::GeneratorMode)new_mode;
+			generator.set_mode(mode);
+		}
+#else
 		if (modeTrigger.process(params[MODE_PARAM].getValue())) {
 			mode = (tides::GeneratorMode)(((int)mode - 1 + 3) % 3);
 			generator.set_mode(mode);
 		}
+#endif
 		lights[MODE_GREEN_LIGHT].value = (mode == 2) ? 1.0 : 0.0;
 		lights[MODE_RED_LIGHT].value = (mode == 0) ? 1.0 : 0.0;
 
 		tides::GeneratorRange range = generator.range();
+
+#ifdef METAMODULE
+		if (auto new_range = params[RANGE_PARAM].getValue(); new_range != range) {
+			range = (tides::GeneratorRange)new_range;
+			generator.set_range(range);
+		}
+#else
 		if (rangeTrigger.process(params[RANGE_PARAM].getValue())) {
 			range = (tides::GeneratorRange)(((int)range - 1 + 3) % 3);
 			generator.set_range(range);
 		}
+#endif
 		lights[RANGE_GREEN_LIGHT].value = (range == 2) ? 1.0 : 0.0;
 		lights[RANGE_RED_LIGHT].value = (range == 0) ? 1.0 : 0.0;
 
