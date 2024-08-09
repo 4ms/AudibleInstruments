@@ -43,7 +43,7 @@ struct Tides : Module {
 		NUM_LIGHTS
 	};
 
-	bool sheep;
+	bool sheep = true;
 	tides::Generator generator;
 	int frame = 0;
 	uint8_t lastGate;
