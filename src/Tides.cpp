@@ -94,14 +94,16 @@ struct Tides : Module {
 			mode = (tides::GeneratorMode)new_mode;
 			generator.set_mode(mode);
 		}
+		lights[MODE_GREEN_LIGHT].value = (mode == 0) ? 1.0 : 0.0;
+		lights[MODE_RED_LIGHT].value = (mode == 2) ? 1.0 : 0.0;
 #else
 		if (modeTrigger.process(params[MODE_PARAM].getValue())) {
 			mode = (tides::GeneratorMode)(((int)mode - 1 + 3) % 3);
 			generator.set_mode(mode);
 		}
-#endif
 		lights[MODE_GREEN_LIGHT].value = (mode == 2) ? 1.0 : 0.0;
 		lights[MODE_RED_LIGHT].value = (mode == 0) ? 1.0 : 0.0;
+#endif
 
 		tides::GeneratorRange range = generator.range();
 
