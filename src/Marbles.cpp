@@ -230,13 +230,20 @@ struct Marbles : Module {
 		configParam(DEJA_VU_PARAM, 0.0, 1.0, 0.5, "Deja vu probability");
 		configParam(T_RATE_PARAM, -1.0, 1.0, 0.0, "Clock rate");
 		configParam(X_SPREAD_PARAM, 0.0, 1.0, 0.5, "Probability distribution");
+#ifdef METAMODULE
+		configSwitch(T_MODE_PARAM, 2, 0, 0, "T mode");
+		configSwitch(X_MODE_PARAM, 2, 0, 0, "X mode");
+		configSwitch(T_RANGE_PARAM, 2, 0, 0, "Clock range mode");
+		configSwitch(X_RANGE_PARAM, 2, 0, 0, "Output voltage range mode");
+#else
 		configButton(T_MODE_PARAM, "T mode");
 		configButton(X_MODE_PARAM, "X mode");
+		configButton(T_RANGE_PARAM, "Clock range mode");
+		configButton(X_RANGE_PARAM, "Output voltage range mode");
+#endif
 		configParam(DEJA_VU_LENGTH_PARAM, 0.0, 1.0, 0.0, "Loop length");
 		configParam(T_BIAS_PARAM, 0.0, 1.0, 0.5, "Gate bias");
 		configParam(X_BIAS_PARAM, 0.0, 1.0, 0.5, "Distribution bias");
-		configButton(T_RANGE_PARAM, "Clock range mode");
-		configButton(X_RANGE_PARAM, "Output voltage range mode");
 		configButton(EXTERNAL_PARAM, "External processing mode");
 		configParam(T_JITTER_PARAM, 0.0, 1.0, 0.0, "Randomness amount");
 		configParam(X_STEPS_PARAM, 0.0, 1.0, 0.5, "Smoothness");
@@ -370,10 +377,10 @@ struct Marbles : Module {
 			x_deja_vu = !x_deja_vu;
 		}
 #ifdef METAMODULE
-		t_mode = std::clamp<int>(std::round(params[T_MODE_PARAM].getValue() * 3.f), 0, 2);
-		x_mode = std::clamp<int>(std::round(params[X_MODE_PARAM].getValue() * 3.f), 0, 2);
-		t_range = std::clamp<int>(std::round(params[T_RANGE_PARAM].getValue() * 3.f), 0, 2);
-		x_range = std::clamp<int>(std::round(params[X_RANGE_PARAM].getValue() * 3.f), 0, 2);
+		t_mode = params[T_MODE_PARAM].getValue();
+		x_mode = params[X_MODE_PARAM].getValue();
+		t_range = params[T_RANGE_PARAM].getValue();
+		x_range = params[X_RANGE_PARAM].getValue();
 #else
 		if (tModeTrigger.process(params[T_MODE_PARAM].getValue() <= ButtonThreshold)) {
 			t_mode = (t_mode + 1) % 3;
