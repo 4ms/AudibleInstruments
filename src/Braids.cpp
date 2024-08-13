@@ -191,6 +191,8 @@ struct Braids : Module {
 	void setShapeParam(int shape) {
 		params[SHAPE_PARAM].setValue(shape / (float) braids::MACRO_OSC_SHAPE_LAST_ACCESSIBLE_FROM_META);
 	}
+
+	size_t get_display_text(int led_id, std::span<char> text) override;
 };
 
 
@@ -250,6 +252,15 @@ static const std::vector<ShapeInfo> SHAPE_INFOS = {
 	{"QPSK", "Digital modulation"},
 };
 
+size_t Braids::get_display_text(int led_id, std::span<char> text) {
+	auto shape = std::clamp<int>(getShapeParam(), 0, SHAPE_INFOS.size());
+	auto chars = SHAPE_INFOS[shape].code;
+
+	size_t chars_to_copy = std::min(text.size(), chars.length());
+	std::copy(chars.begin(), std::next(chars.begin(), chars_to_copy), text.begin());
+	
+	return chars_to_copy;
+}
 
 struct BraidsDisplay : TransparentWidget {
 	Braids* module;
@@ -291,7 +302,6 @@ struct BraidsDisplay : TransparentWidget {
 		Widget::drawLayer(args, layer);
 	}
 };
-
 
 struct BraidsWidget : ModuleWidget {
 	BraidsWidget(Braids* module) {
