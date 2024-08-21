@@ -216,11 +216,13 @@ struct Tides : Module {
 		json_t* modeJ = json_object_get(rootJ, "mode");
 		if (modeJ) {
 			generator.set_mode((tides::GeneratorMode) json_integer_value(modeJ));
+			params[MODE_PARAM].setValue(json_integer_value(modeJ));
 		}
 
 		json_t* rangeJ = json_object_get(rootJ, "range");
 		if (rangeJ) {
 			generator.set_range((tides::GeneratorRange) json_integer_value(rangeJ));
+			params[RANGE_PARAM].setValue(json_integer_value(rangeJ));
 		}
 
 		json_t* sheepJ = json_object_get(rootJ, "sheep");

@@ -331,20 +331,36 @@ struct Marbles : Module {
 			x_deja_vu = json_boolean_value(x_deja_vuJ);
 
 		json_t* t_modeJ = json_object_get(rootJ, "t_mode");
-		if (t_modeJ)
+		if (t_modeJ){
 			t_mode = json_integer_value(t_modeJ);
+#ifdef METAMODULE
+			params[T_MODE_PARAM].setValue(t_mode);
+#endif
+		}
 
 		json_t* x_modeJ = json_object_get(rootJ, "x_mode");
-		if (x_modeJ)
+		if (x_modeJ) {
 			x_mode = json_integer_value(x_modeJ);
+#ifdef METAMODULE
+			params[X_MODE_PARAM].setValue(x_mode);
+#endif
+		}
 
 		json_t* t_rangeJ = json_object_get(rootJ, "t_range");
-		if (t_rangeJ)
+		if (t_rangeJ) {
 			t_range = json_integer_value(t_rangeJ);
+#ifdef METAMODULE
+			params[T_RANGE_PARAM].setValue(t_range);
+#endif
+		}
 
 		json_t* x_rangeJ = json_object_get(rootJ, "x_range");
-		if (x_rangeJ)
+		if (x_rangeJ) {
 			x_range = json_integer_value(x_rangeJ);
+#ifdef METAMODULE
+			params[X_RANGE_PARAM].setValue(x_range);
+#endif
+		}
 
 		json_t* externalJ = json_object_get(rootJ, "external");
 		if (externalJ)

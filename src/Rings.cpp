@@ -255,11 +255,13 @@ struct Rings : Module {
 		json_t* polyphonyJ = json_object_get(rootJ, "polyphony");
 		if (polyphonyJ) {
 			polyphonyMode = json_integer_value(polyphonyJ);
+			params[POLYPHONY_PARAM].setValue(polyphonyMode);
 		}
 
 		json_t* modelJ = json_object_get(rootJ, "model");
 		if (modelJ) {
 			resonatorModel = (rings::ResonatorModel) json_integer_value(modelJ);
+			params[RESONATOR_PARAM].setValue(resonatorModel);
 		}
 
 		json_t* easterEggJ = json_object_get(rootJ, "easterEgg");
