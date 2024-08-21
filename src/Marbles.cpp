@@ -144,6 +144,9 @@ struct Marbles : Module {
 		EXTERNAL_PARAM,
 		T_JITTER_PARAM,
 		X_STEPS_PARAM,
+#ifdef METAMODULE
+		X_SCALE_PARAM,
+#endif
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -367,8 +370,12 @@ struct Marbles : Module {
 			external = json_boolean_value(externalJ);
 
 		json_t* x_scaleJ = json_object_get(rootJ, "x_scale");
-		if (x_scaleJ)
+		if (x_scaleJ) {
 			x_scale = json_integer_value(x_scaleJ);
+#ifdef METAMODULE
+			params[X_SCALE_PARAM].setValue((float)x_scale / 5.f);
+#endif
+		}
 
 		json_t* y_divider_indexJ = json_object_get(rootJ, "y_divider_index");
 		if (y_divider_indexJ)
@@ -397,6 +404,8 @@ struct Marbles : Module {
 		x_mode = params[X_MODE_PARAM].getValue();
 		t_range = params[T_RANGE_PARAM].getValue();
 		x_range = params[X_RANGE_PARAM].getValue();
+
+		x_scale = int(params[X_SCALE_PARAM].getValue() * 5.f);
 #else
 		if (tModeTrigger.process(params[T_MODE_PARAM].getValue() <= ButtonThreshold)) {
 			t_mode = (t_mode + 1) % 3;
