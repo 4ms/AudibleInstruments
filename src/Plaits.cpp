@@ -51,7 +51,12 @@ struct Plaits : Module {
 
 	dsp::SampleRateConverter<16 * 2> outputSrc;
 	dsp::DoubleRingBuffer<dsp::Frame<16 * 2>, 256> outputBuffer;
+#ifdef METAMODULE
+	bool lowCpu = true;
+#else
 	bool lowCpu = false;
+#endif
+	float samplerateAdjust = 0.f;
 
 	dsp::BooleanTrigger model1Trigger;
 	dsp::BooleanTrigger model2Trigger;
@@ -110,9 +115,13 @@ struct Plaits : Module {
 	}
 
 	void dataFromJson(json_t* rootJ) override {
+#ifdef METAMODULE
+		lowCpu = true;
+#else
 		json_t* lowCpuJ = json_object_get(rootJ, "lowCpu");
 		if (lowCpuJ)
 			lowCpu = json_boolean_value(lowCpuJ);
+#endif
 
 		json_t* modelJ = json_object_get(rootJ, "model");
 		if (modelJ)
@@ -184,7 +193,7 @@ struct Plaits : Module {
 			// Calculate pitch for lowCpu mode if needed
 			float pitch = params[FREQ_PARAM].getValue();
 			if (lowCpu)
-				pitch += std::log2(48000.f * args.sampleTime);
+				pitch += samplerateAdjust;
 			// Update patch
 			patch.note = 60.f + pitch * 12.f;
 			patch.harmonics = params[HARMONICS_PARAM].getValue();
@@ -255,6 +264,11 @@ struct Plaits : Module {
 		}
 		outputs[OUT_OUTPUT].setChannels(channels);
 		outputs[AUX_OUTPUT].setChannels(channels);
+	}
+
+	void set_samplerate(float sr) override {
+		if (sr > 0)
+			samplerateAdjust = std::log2(48000.f / sr);
 	}
 };
 
