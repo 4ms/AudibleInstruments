@@ -214,6 +214,11 @@ struct Marbles : Module {
 	int y_divider_index;
 	int x_clock_source_internal;
 
+	std::optional<int> initial_t_mode{};
+	std::optional<int> initial_x_mode{};
+	std::optional<int> initial_t_range{};
+	std::optional<int> initial_x_range{};
+
 	// Buffers
 	stmlib::GateFlags t_clocks[BLOCK_SIZE] = {};
 	stmlib::GateFlags last_t_clock = 0;
@@ -338,6 +343,7 @@ struct Marbles : Module {
 			t_mode = json_integer_value(t_modeJ);
 #ifdef METAMODULE
 			params[T_MODE_PARAM].setValue(t_mode);
+			initial_t_mode = t_mode;
 #endif
 		}
 
@@ -346,6 +352,7 @@ struct Marbles : Module {
 			x_mode = json_integer_value(x_modeJ);
 #ifdef METAMODULE
 			params[X_MODE_PARAM].setValue(x_mode);
+			initial_x_mode = x_mode;
 #endif
 		}
 
@@ -354,6 +361,7 @@ struct Marbles : Module {
 			t_range = json_integer_value(t_rangeJ);
 #ifdef METAMODULE
 			params[T_RANGE_PARAM].setValue(t_range);
+			initial_t_range = t_range;
 #endif
 		}
 
@@ -362,6 +370,7 @@ struct Marbles : Module {
 			x_range = json_integer_value(x_rangeJ);
 #ifdef METAMODULE
 			params[X_RANGE_PARAM].setValue(x_range);
+			initial_x_range = x_range;
 #endif
 		}
 
@@ -400,6 +409,24 @@ struct Marbles : Module {
 			x_deja_vu = !x_deja_vu;
 		}
 #ifdef METAMODULE
+		if (initial_t_mode) {
+			params[T_MODE_PARAM].setValue(*initial_t_mode);
+			initial_t_mode.reset();
+		}
+		if (initial_x_mode) {
+			params[X_MODE_PARAM].setValue(*initial_x_mode);
+			initial_x_mode.reset();
+		}
+		if (initial_t_range) {
+			printf("t_range: %d\n", *initial_t_range);
+			params[T_RANGE_PARAM].setValue(*initial_t_range);
+			initial_t_range.reset();
+		}
+		if (initial_x_range) {
+			printf("x_range: %d\n", *initial_x_range);
+			params[X_RANGE_PARAM].setValue(*initial_x_range);
+			initial_x_range.reset();
+		}
 		t_mode = params[T_MODE_PARAM].getValue();
 		x_mode = params[X_MODE_PARAM].getValue();
 		t_range = params[T_RANGE_PARAM].getValue();

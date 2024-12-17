@@ -305,7 +305,7 @@ struct Elements : Module {
 			}
 		}
 		else {
-			for (unsigned c = 0; c < MaxChannel; c++) {
+			for (unsigned c = 0; c < MaxChannels; c++) {
 				parts[c]->set_easter_egg(false);
 				parts[c]->set_resonator_model((elements::ResonatorModel) model);
 			}
