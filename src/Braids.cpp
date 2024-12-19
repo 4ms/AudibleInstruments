@@ -265,42 +265,42 @@ size_t Braids::get_display_text(int led_id, std::span<char> text) {
 struct BraidsDisplay : TransparentWidget {
 	Braids* module;
 
-	void draw(const DrawArgs& args) override {
-		// Background
-		NVGcolor backgroundColor = nvgRGB(0x38, 0x38, 0x38);
-		NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-		nvgBeginPath(args.vg);
-		nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 5.0);
-		nvgFillColor(args.vg, backgroundColor);
-		nvgFill(args.vg);
-		nvgStrokeWidth(args.vg, 1.0);
-		nvgStrokeColor(args.vg, borderColor);
-		nvgStroke(args.vg);
+	// void draw(const DrawArgs& args) override {
+	// 	// Background
+	// 	NVGcolor backgroundColor = nvgRGB(0x38, 0x38, 0x38);
+	// 	NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
+	// 	nvgBeginPath(args.vg);
+	// 	nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 5.0);
+	// 	nvgFillColor(args.vg, backgroundColor);
+	// 	nvgFill(args.vg);
+	// 	nvgStrokeWidth(args.vg, 1.0);
+	// 	nvgStrokeColor(args.vg, borderColor);
+	// 	nvgStroke(args.vg);
 
-		Widget::draw(args);
-	}
+	// 	Widget::draw(args);
+	// }
 
-	void drawLayer(const DrawArgs& args, int layer) override {
-		if (layer == 1) {
-			// Text
-			int shape = module ? module->settings.shape : 0;
-			std::shared_ptr<Font> font = APP->window->loadFont(asset::plugin(pluginInstance, "res/hdad-segment14-1.002/Segment14.ttf"));
-			if (font) {
-				nvgFontSize(args.vg, 38);
-				nvgFontFaceId(args.vg, font->handle);
-				nvgTextLetterSpacing(args.vg, 2.5);
+	// void drawLayer(const DrawArgs& args, int layer) override {
+	// 	if (layer == 1) {
+	// 		// Text
+	// 		int shape = module ? module->settings.shape : 0;
+	// 		std::shared_ptr<Font> font = APP->window->loadFont(asset::plugin(pluginInstance, "res/hdad-segment14-1.002/Segment14.ttf"));
+	// 		if (font) {
+	// 			nvgFontSize(args.vg, 38);
+	// 			nvgFontFaceId(args.vg, font->handle);
+	// 			nvgTextLetterSpacing(args.vg, 2.5);
 
-				Vec textPos = Vec(9, 48);
-				NVGcolor textColor = nvgRGB(0xaf, 0xd2, 0x2c);
-				nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-				// Background of all segments
-				nvgText(args.vg, textPos.x, textPos.y, "~~~~", NULL);
-				nvgFillColor(args.vg, textColor);
-				nvgText(args.vg, textPos.x, textPos.y, SHAPE_INFOS[shape].code.c_str(), NULL);
-			}
-		}
-		Widget::drawLayer(args, layer);
-	}
+	// 			Vec textPos = Vec(9, 48);
+	// 			NVGcolor textColor = nvgRGB(0xaf, 0xd2, 0x2c);
+	// 			nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
+	// 			// Background of all segments
+	// 			nvgText(args.vg, textPos.x, textPos.y, "~~~~", NULL);
+	// 			nvgFillColor(args.vg, textColor);
+	// 			nvgText(args.vg, textPos.x, textPos.y, SHAPE_INFOS[shape].code.c_str(), NULL);
+	// 		}
+	// 	}
+	// 	Widget::drawLayer(args, layer);
+	// }
 };
 
 struct BraidsWidget : ModuleWidget {
