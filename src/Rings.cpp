@@ -273,11 +273,13 @@ struct Rings : Module {
 	void onReset() override {
 		polyphonyMode = 0;
 		resonatorModel = rings::RESONATOR_MODEL_MODAL;
+		params[RESONATOR_PARAM].setValue(resonatorModel);
 	}
 
 	void onRandomize() override {
 		polyphonyMode = random::u32() % 3;
 		resonatorModel = (rings::ResonatorModel)(random::u32() % 3);
+		params[RESONATOR_PARAM].setValue(resonatorModel);
 	}
 };
 
@@ -343,7 +345,10 @@ struct RingsWidget : ModuleWidget {
 		for (int i = 0; i < 6; i++) {
 			menu->addChild(createCheckMenuItem(modelLabels[i], "",
 				[=]() {return module->resonatorModel == i;},
-				[=]() {module->resonatorModel = (rings::ResonatorModel) i;}
+				[=]() {
+					module->resonatorModel = (rings::ResonatorModel)i;
+					module->params[module->RESONATOR_PARAM].setValue(module->resonatorModel);
+				}
 			));
 		}
 
