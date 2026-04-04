@@ -44,13 +44,13 @@ struct Plaits : Module {
 		NUM_LIGHTS
 	};
 
-	plaits::Voice voice[16];
+	plaits::Voice voice[PORT_MAX_CHANNELS];
 	plaits::Patch patch = {};
-	char shared_buffer[16][16384] = {};
+	char shared_buffer[PORT_MAX_CHANNELS][16384] = {};
 	float triPhase = 0.f;
 
-	dsp::SampleRateConverter<16 * 2> outputSrc;
-	dsp::DoubleRingBuffer<dsp::Frame<16 * 2>, 256> outputBuffer;
+	dsp::SampleRateConverter<PORT_MAX_CHANNELS * 2> outputSrc;
+	dsp::DoubleRingBuffer<dsp::Frame<PORT_MAX_CHANNELS * 2>, 256> outputBuffer;
 #ifdef METAMODULE
 	bool lowCpu = true;
 #else
@@ -87,7 +87,7 @@ struct Plaits : Module {
 		configOutput(OUT_OUTPUT, "Main");
 		configOutput(AUX_OUTPUT, "Auxiliary");
 
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i < PORT_MAX_CHANNELS; i++) {
 			stmlib::BufferAllocator allocator(shared_buffer[i], sizeof(shared_buffer[i]));
 			voice[i].Init(&allocator);
 		}
@@ -206,7 +206,7 @@ struct Plaits : Module {
 			patch.morph_modulation_amount = params[MORPH_CV_PARAM].getValue();
 
 			// Render output buffer for each voice
-			dsp::Frame<16 * 2> outputFrames[blockSize];
+			dsp::Frame<PORT_MAX_CHANNELS * 2> outputFrames[blockSize];
 			for (int c = 0; c < channels; c++) {
 				// Construct modulations
 				plaits::Modulations modulations;
@@ -255,7 +255,7 @@ struct Plaits : Module {
 
 		// Set output
 		if (!outputBuffer.empty()) {
-			dsp::Frame<16 * 2> outputFrame = outputBuffer.shift();
+			dsp::Frame<PORT_MAX_CHANNELS * 2> outputFrame = outputBuffer.shift();
 			for (int c = 0; c < channels; c++) {
 				// Inverting op-amp on outputs
 				outputs[OUT_OUTPUT].setVoltage(-outputFrame.samples[c * 2 + 0] * 5.f, c);
