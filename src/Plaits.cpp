@@ -174,6 +174,8 @@ struct Plaits : Module {
 			bool pulse = false;
 			for (int c = 0; c < channels; c++) {
 				int activeEngine = voice[c].active_engine();
+				if (activeEngine < 0 || activeEngine >= 16)
+					continue;
 				activeEngines[activeEngine] = true;
 				// Pulse the light if at least one voice is using a different engine.
 				if (activeEngine != patch.engine)
