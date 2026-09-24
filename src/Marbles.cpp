@@ -241,8 +241,8 @@ struct Marbles : Module {
 #ifdef METAMODULE
 		configSwitch(T_MODE_PARAM, 2, 0, 0, "T mode");
 		configSwitch(X_MODE_PARAM, 2, 0, 0, "X mode");
-		configSwitch(T_RANGE_PARAM, 2, 0, 0, "Clock range mode");
-		configSwitch(X_RANGE_PARAM, 2, 0, 0, "Output voltage range mode");
+		configSwitch(T_RANGE_PARAM, 2, 0, 1, "Clock range mode");
+		configSwitch(X_RANGE_PARAM, 2, 0, 1, "Output voltage range mode");
 #else
 		configButton(T_MODE_PARAM, "T mode");
 		configButton(X_MODE_PARAM, "X mode");

@@ -53,8 +53,8 @@ struct Tides : Module {
 	Tides() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 #ifdef METAMODULE
-		configSwitch(MODE_PARAM, 0, 2, 0, "Output mode");
-		configSwitch(RANGE_PARAM, 2, 0, 0, "Frequency range");
+		configSwitch(MODE_PARAM, 0, 2, 1, "Output mode");
+		configSwitch(RANGE_PARAM, 2, 0, 1, "Frequency range");
 #else
 		configButton(MODE_PARAM, "Output mode");
 		configButton(RANGE_PARAM, "Frequency range");
